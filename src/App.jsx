@@ -29,7 +29,6 @@ function App() {
   const [isSymptomModalOpen, setIsSymptomModalOpen] = useState(false);
   const [CartItems, setCartItems] = useState(loadFromLocalStorage());
 
-
   // кароче
   // date = 22
   // lists = {}
@@ -89,30 +88,32 @@ function App() {
   // Глобальная выбранная дата
   const [currentDate, setCurrentDate] = useState(new Date());
   // const [currentDateKey, setCurrentDateKey] = useState(KeyFromDate(currentDate));
-  const [currentDateKey, setCurrentDateKey] = useState(currentDate.toISOString().split("T")[0]);
+  const [currentDateKey, setCurrentDateKey] = useState(
+    currentDate.toISOString().split("T")[0]
+  );
   // Функционал смены currentDate []
   const goNextDate = () => {
-    if (currentDate) {
-      // setCurrentDate(currentDate.getDate() + 1);
-      const newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() + 1);
-      setCurrentDate(newDate);
-    }
+    console.log("--- МЕНЯЮ ДАТУ ---");
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + 1);
+    setCurrentDate(newDate);
+    setCurrentDateKey(newDate.toISOString().split("T")[0]);
+    setList(Lists[newDate.toISOString().split("T")[0]]);
   };
-
+  
   const goPrevDate = () => {
-    if (currentDate) {
-      // setCurrentDate(currentDate.getDate() - 1);
-      const newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() - 1);
-      setCurrentDate(newDate);
-    }
+    console.log("--- МЕНЯЮ ДАТУ ---");
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() - 1);
+    setCurrentDate(newDate);
+    setCurrentDateKey(newDate.toISOString().split("T")[0]);
+    setList(Lists[newDate.toISOString().split("T")[0]]);
   };
 
   const [Lists, setNotes] = useState({});
   const [List, setList] = useState(null);
   const [currentList, setcurrentList] = useState(Lists[currentDateKey]);
-  
+
   const [Item, setItem] = useState({});
 
   // Создаем Объект
@@ -124,16 +125,33 @@ function App() {
 
   // Добавляем Объект в Список
   const AddItemInList = (obj) => {
-    // console.log("Пытаюсь добавить объект в список");    
-    console.log("Пытаюсь добавить объект в список c текущей датой");    
+    console.log("Пытаюсь добавить объект в список");
     const item = CreateItem(obj);
-    if (currentList) {
+    if (List) {
+      console.log("Список не пустой");
+      console.log("Добавляю в текущий список объект");
+      console.dir(item);
+      setList((prevList) => [...prevList, item]);
+    } else {
+      console.log("Не нашёл список");
+      console.log("Создаю список");
+      console.log("Добавляю в текущий список объект");
+      console.dir(item);
+      setList([item]);
+    }
+  };
+  // Добавляем Объект в Список
+  const AddItemInList2 = (obj) => {
+    // console.log("Пытаюсь добавить объект в список");
+    console.log("Пытаюсь добавить объект в список c текущей датой");
+    const item = CreateItem(obj);
+    if (List) {
       console.log("Список не пустой");
       console.log("Добавляю в текущий список объект");
       console.dir(item);
       setcurrentList((prevList) => [...prevList, item]);
     } else {
-      console.log("Не нашёл список");    
+      console.log("Не нашёл список");
       console.log("Создаю список");
       console.log("Добавляю в текущий список объект");
       console.dir(item);
@@ -141,22 +159,23 @@ function App() {
     }
   };
 
-
-
-  // Очищаем список при смене даты
-  useEffect(() => {
-    console.log("Достаю свежий список при переключении даты");
-    // Если Список ещё не был создан
-    if (Lists[currentDateKey]) {
-      console.log("Список есть в Списках!");
-      const newList = Lists[currentDateKey];
-      setList(newList);
-    } else {
-      console.log("Не нашёл свежий список при переключении даты");
-      setList(null);
-      // БАГ. СОЗДАЁТ ПУСТЫЕ СПИСКИ
-    }
-  }, [currentDate]);
+  // А ОНО НАДО????
+  // 
+  // 
+  // // Очищаем список при смене даты
+  // useEffect(() => {
+  //   console.log("Достаю свежий список при переключении даты");
+  //   // Если Список ещё не был создан
+  //   if (List) {
+  //     console.log("Список есть в Списках!");
+  //     const newList = Lists[currentDateKey];
+  //     setList(newList);
+  //   } else {
+  //     console.log("Не нашёл свежий список при переключении даты");
+  //     setList(null);
+  //     // БАГ. СОЗДАЁТ ПУСТЫЕ СПИСКИ
+  //   }
+  // }, [currentDate]);
 
   const AddListInNotes = (list) => {
     setNotes((prevNotes) => ({ ...prevNotes, [currentDateKey]: list }));
@@ -206,19 +225,6 @@ function App() {
     }
   };
 
-  
-  // Добавляем Список в Списки
-  useEffect(() => {
-    // if (List) {
-    console.log("Пытаюсь обновить Listsss");
-    if (Lists[currentDateKey]) {
-      console.log("Есть что добавлять. Добавляю");
-      AddListInNotes(List);
-    } else {
-      console.log("Нечего добавлять");
-    }
-  }, [List]);
-
   // Свежий List
   useEffect(() => {
     console.log("Свежий List");
@@ -230,13 +236,34 @@ function App() {
     console.log("Свежий currentList");
     console.dir(currentList);
   }, [currentList]);
-  
+
   // Cвежий Lists
   useEffect(() => {
     console.log("Свежий Listsss");
     console.dir(Lists);
   }, [Lists]);
 
+  // useEffect(() => {
+  //   setCurrentDateKey(currentDate.toISOString().split("T")[0]);
+  // }, [currentDate]);
+
+  // Cвежий currentDateKey
+  useEffect(() => {
+    console.log("Свежий DateKey");
+    console.dir(currentDateKey);
+  }, [currentDateKey]);
+
+  // Добавляем Список в Списки
+  useEffect(() => {
+    // if (List) {
+    console.log("Пытаюсь обновить Listsss");
+    if (List) {
+      console.log("Есть что добавлять. Добавляю");
+      AddListInNotes(List);
+    } else {
+      console.log("Нечего добавлять");
+    }
+  }, [List]);
 
   return (
     <div className="app">
@@ -255,44 +282,175 @@ function App() {
             </li>
           ))}
         </ul> баг отсуствие данных undef.map */}
-        <ul
-          style={{
-            display: "flex",
-            flexDirection: "column-reverse",
-            alignItems: "center",
-          }}
-        >
-          {Lists[currentDateKey] &&
-          Array.isArray(Lists[currentDateKey]) ? (
-            Lists[currentDateKey].map((el, index) => (
-              <li
-                key={index}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <strong>{el.name}:</strong>
-                <img
-                  src={el.image}
-                  className={
-                    el.type == "food"
-                      ? "food-image"
-                      : el.type == "symptom"
-                      ? "symptom-image"
-                      : "undef-image"
-                  }
-                  alt=""
-                />
-              </li>
-            ))
-          ) : (
-            <li>Нет записей для этой даты</li>
-          )}
-        </ul>
+        <div style={{display: 'flex', gap: '10px', alignItems: 'flex-start', width: '100%', justifyContent: 'space-between'}}>
+          <ul
+            style={{
+              width: '300px',
+              display: "flex",
+              flexDirection: "column-reverse",
+              alignItems: "center",
+            }}
+          >
+            {Lists[
+              new Date(currentDate.getTime() - 86400000)
+                .toISOString()
+                .split("T")[0]
+            ] &&
+            Array.isArray(
+              Lists[
+                new Date(currentDate.getTime() - 86400000)
+                  .toISOString()
+                  .split("T")[0]
+              ]
+            ) ? (
+              Lists[
+                new Date(currentDate.getTime() - 86400000)
+                  .toISOString()
+                  .split("T")[0]
+              ].map((el, index) => (
+                <li
+                  key={index}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <strong>{el.name}:</strong>
+                  <img
+                    src={el.image}
+                    className={
+                      el.type == "food"
+                        ? "food-image"
+                        : el.type == "symptom"
+                        ? "symptom-image"
+                        : "undef-image"
+                    }
+                    alt=""
+                  />
+                </li>
+              ))
+            ) : (
+              <li>Нет записей для этой даты</li>
+            )}
+          </ul>
 
+          <ul
+            style={{
+              width: '300px',
+              display: "flex",
+              flexDirection: "column-reverse",
+              alignItems: "center",
+            }}
+          >
+            {Lists[currentDateKey] && Array.isArray(Lists[currentDateKey]) ? (
+              Lists[currentDateKey].map((el, index) => (
+                <li
+                  key={index}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <strong>{el.name}:</strong>
+                  <img
+                    src={el.image}
+                    className={
+                      el.type == "food"
+                        ? "food-image"
+                        : el.type == "symptom"
+                        ? "symptom-image"
+                        : "undef-image"
+                    }
+                    alt=""
+                  />
+                </li>
+              ))
+            ) : (
+              <li>Нет записей для этой даты</li>
+            )}
+          </ul>
+
+          <ul
+            style={{
+              width: '300px',
+              display: "flex",
+              flexDirection: "column-reverse",
+              alignItems: "center",
+            }}
+          >
+            {Lists[
+              new Date(currentDate.getTime() + 86400000)
+                .toISOString()
+                .split("T")[0]
+            ] &&
+            Array.isArray(
+              Lists[
+                new Date(currentDate.getTime() + 86400000)
+                  .toISOString()
+                  .split("T")[0]
+              ]
+            ) ? (
+              Lists[
+                new Date(currentDate.getTime() + 86400000)
+                  .toISOString()
+                  .split("T")[0]
+              ].map((el, index) => (
+                <li
+                  key={index}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <strong>{el.name}:</strong>
+                  <img
+                    src={el.image}
+                    className={
+                      el.type == "food"
+                        ? "food-image"
+                        : el.type == "symptom"
+                        ? "symptom-image"
+                        : "undef-image"
+                    }
+                    alt=""
+                  />
+                </li>
+              ))
+            ) : (
+              <li>Нет записей для этой даты</li>
+            )}
+          </ul>
+        </div>
+
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
         <h1>Мой дневник питания</h1>
         <div className="navigation">
           <button onClick={goPrev} disabled={currentIndex === 0}>
