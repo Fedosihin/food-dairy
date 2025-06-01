@@ -6,6 +6,18 @@
   /* justify-content: center; */
 }
 
+
+/* LIST COOLER */
+.days-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-card {
+  width: 200px;
+}
+
+
 .add-button {
   position: fixed;
   bottom: 20px;
@@ -68,7 +80,15 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: #ffffff 3px solid;
+  border: #949c4c 3px solid;
+  object-fit: cover;
+}
+
+.food-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: #7fff7b 3px solid;
   object-fit: cover;
 }
 
