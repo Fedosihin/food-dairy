@@ -16,12 +16,12 @@ const loadFromLocalStorage = () => {
 };
 
 const saveToLocalStorage = (data) => {
-  try {
-    const serializedData = JSON.stringify(data);
-    localStorage.setItem("cart", serializedData);
-  } catch (e) {
-    console.error("LocalStorage save error:", e);
-  }
+  // try {
+  //   const serializedData = JSON.stringify(data);
+  //   localStorage.setItem("cart", serializedData);
+  // } catch (e) {
+  //   console.error("LocalStorage save error:", e);
+  // }
 };
 
 function App() {
