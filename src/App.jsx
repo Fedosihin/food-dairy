@@ -5,13 +5,14 @@ import Cart from "./Cart";
 import SymptomModal from "./SymptomModal";
 
 const loadFromLocalStorage = () => {
-  try {
-    const serializedData = localStorage.getItem("cart");
-    return serializedData ? JSON.parse(serializedData) : [];
-  } catch (e) {
-    console.error("LocalStorage load error:", e);
-    return [];
-  }
+  // try {
+  //   const serializedData = localStorage.getItem("cart");
+  //   return serializedData ? JSON.parse(serializedData) : [];
+  // } catch (e) {
+  //   console.error("LocalStorage load error:", e);
+  //   return [];
+  // }
+  return [];
 };
 
 const saveToLocalStorage = (data) => {
@@ -28,18 +29,19 @@ function App() {
   const [isSymptomModalOpen, setIsSymptomModalOpen] = useState(false);
   const [CartItems, setCartItems] = useState(loadFromLocalStorage());
 
-  const EXAMPLE_notes = {
-    "2022-02-22": [
-      { type: "food", name: "banana" },
-      { type: "symptom", name: "weakness" },
-    ],
-    "2022-03-26": [
-      { type: "food", name: "apple" },
-      { type: "symptom", name: "acid" },
-    ],
-  };
-  const EXAMPLE_note = [{ type: "food", name: "banana" }];
-  const EXAMPLE_item = { type: "food", name: "banana" };
+
+  // кароче
+  // date = 22
+  // lists = {}
+  // list = undefined
+  // item = {name: banana}
+
+  // Загружаю дату
+  // Смотрю есть ли список к дате - нет - говорю нет списка
+
+  // Добавляю айтем - создаю список - если его не было - пушу - иначе пушу просто
+
+  // перелистываю дату - обновлаю дату - список = null
 
   const initialDays = [
     {
@@ -77,8 +79,17 @@ function App() {
     setCartItems([...CartItems, { ...product, type }]);
   };
 
+  // Дату в Key
+  // const KeyFromDate = (date) => {
+  //   // console.log("date: " + date);
+  //   console.log("KeyFromDate running");
+  //   return date.toISOString().split("T")[0];
+  // };
+
   // Глобальная выбранная дата
   const [currentDate, setCurrentDate] = useState(new Date());
+  // const [currentDateKey, setCurrentDateKey] = useState(KeyFromDate(currentDate));
+  const [currentDateKey, setCurrentDateKey] = useState(currentDate.toISOString().split("T")[0]);
   // Функционал смены currentDate []
   const goNextDate = () => {
     if (currentDate) {
@@ -99,56 +110,59 @@ function App() {
   };
 
   const [Lists, setNotes] = useState({});
-  const [List, setList] = useState([]);
+  const [List, setList] = useState(null);
+  const [currentList, setcurrentList] = useState(Lists[currentDateKey]);
+  
   const [Item, setItem] = useState({});
 
   // Создаем Объект
   const CreateItem = (obj) => {
-    console.log("created item: " + obj);
+    console.log("Создал объект");
+    console.dir(obj);
     return obj;
   };
 
   // Добавляем Объект в Список
   const AddItemInList = (obj) => {
+    // console.log("Пытаюсь добавить объект в список");    
+    console.log("Пытаюсь добавить объект в список c текущей датой");    
     const item = CreateItem(obj);
-    setList((prevList) => [...prevList, item]);
-    console.log("Added item: " + item + " in List");
+    if (currentList) {
+      console.log("Список не пустой");
+      console.log("Добавляю в текущий список объект");
+      console.dir(item);
+      setcurrentList((prevList) => [...prevList, item]);
+    } else {
+      console.log("Не нашёл список");    
+      console.log("Создаю список");
+      console.log("Добавляю в текущий список объект");
+      console.dir(item);
+      setcurrentList([item]);
+    }
   };
 
-  // Дату в Key
-  const idFromDate = (date) => {
-    console.log("date: " + date);
-    console.log("idFromDate running");
-    return date.toISOString().split("T")[0];
-  };
 
-  // Добавляем Список в Списки
-  useEffect(() => {
-    console.log("List is updated");
-    console.log("Updating Lists");
-    AddListInNotes(List);
-    console.log("New Lists");
-    console.dir(Lists);
-  }, [List]);
 
-  // Добавляем Список в Списки
+  // Очищаем список при смене даты
   useEffect(() => {
-    console.log("useEff: New List");
-    console.dir(List);
-  }, [List]);
-
-  useEffect(() => {
-    console.log("useEff: New Lists");
-    console.dir(Lists);
-  }, [Lists]);
+    console.log("Достаю свежий список при переключении даты");
+    // Если Список ещё не был создан
+    if (Lists[currentDateKey]) {
+      console.log("Список есть в Списках!");
+      const newList = Lists[currentDateKey];
+      setList(newList);
+    } else {
+      console.log("Не нашёл свежий список при переключении даты");
+      setList(null);
+      // БАГ. СОЗДАЁТ ПУСТЫЕ СПИСКИ
+    }
+  }, [currentDate]);
 
   const AddListInNotes = (list) => {
-    const dateKey = idFromDate(currentDate);
-    setNotes((prevNotes) => ({ ...prevNotes, [dateKey]: list }));
+    setNotes((prevNotes) => ({ ...prevNotes, [currentDateKey]: list }));
     // console.log("Added list " + JSON.stringify(list) + " in Lists " + JSON.stringify(Lists));
-    console.log("Added list ");
+    console.log("Added list in Lists:");
     console.dir(list);
-    console.log(" in Lists ");
   };
 
   // Форматируем дату в YYYY-MM-DD для использования в качестве ключа
@@ -192,16 +206,48 @@ function App() {
     }
   };
 
+  
+  // Добавляем Список в Списки
+  useEffect(() => {
+    // if (List) {
+    console.log("Пытаюсь обновить Listsss");
+    if (Lists[currentDateKey]) {
+      console.log("Есть что добавлять. Добавляю");
+      AddListInNotes(List);
+    } else {
+      console.log("Нечего добавлять");
+    }
+  }, [List]);
+
+  // Свежий List
+  useEffect(() => {
+    console.log("Свежий List");
+    console.dir(List);
+  }, [List]);
+
+  // Свежий currentList
+  useEffect(() => {
+    console.log("Свежий currentList");
+    console.dir(currentList);
+  }, [currentList]);
+  
+  // Cвежий Lists
+  useEffect(() => {
+    console.log("Свежий Listsss");
+    console.dir(Lists);
+  }, [Lists]);
+
+
   return (
     <div className="app">
       <header>
         <h1>Мой дневник питания</h1>
+        <p>{currentDateKey}</p>
         <div className="navigation">
           <button onClick={goPrevDate}>← Назад</button>
           <button onClick={goNextDate}>Вперёд →</button>
         </div>
         {/* <p>{currentDate}</p> */}
-        <p>{idFromDate(currentDate)}</p>
         {/* <ul>
           {Lists[idFromDate(currentDate)].map((note, index) => (
             <li key={index}>
@@ -216,9 +262,9 @@ function App() {
             alignItems: "center",
           }}
         >
-          {Lists[idFromDate(currentDate)] &&
-          Array.isArray(Lists[idFromDate(currentDate)]) ? (
-            Lists[idFromDate(currentDate)].map((el, index) => (
+          {Lists[currentDateKey] &&
+          Array.isArray(Lists[currentDateKey]) ? (
+            Lists[currentDateKey].map((el, index) => (
               <li
                 key={index}
                 style={{
