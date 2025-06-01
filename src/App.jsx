@@ -1,7 +1,7 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
 import ProductModal from "./ProductModal";
-import Cart from "./Cart";
+import Cart from "./Cart.jsx";
 import SymptomModal from "./SymptomModal";
 
 const loadFromLocalStorage = () => {
