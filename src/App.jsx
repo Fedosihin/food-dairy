@@ -580,6 +580,7 @@ function App() {
         <SymptomModal
           onClose={() => setIsSymptomModalOpen(false)}
           // onSelectProduct={addToCart}
+          onSelectSymptom={AddItemInList}
         />
       )}
     </div>
