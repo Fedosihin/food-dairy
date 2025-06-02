@@ -100,7 +100,7 @@ function App() {
     setCurrentDateKey(newDate.toISOString().split("T")[0]);
     setList(Lists[newDate.toISOString().split("T")[0]]);
   };
-  
+
   const goPrevDate = () => {
     console.log("--- МЕНЯЮ ДАТУ ---");
     const newDate = new Date(currentDate);
@@ -110,7 +110,7 @@ function App() {
     setList(Lists[newDate.toISOString().split("T")[0]]);
   };
 
-  const [Lists, setNotes] = useState({});
+  const [Lists, setLists] = useState({});
   const [List, setList] = useState(null);
   const [currentList, setcurrentList] = useState(Lists[currentDateKey]);
 
@@ -160,8 +160,8 @@ function App() {
   };
 
   // А ОНО НАДО????
-  // 
-  // 
+  //
+  //
   // // Очищаем список при смене даты
   // useEffect(() => {
   //   console.log("Достаю свежий список при переключении даты");
@@ -178,7 +178,7 @@ function App() {
   // }, [currentDate]);
 
   const AddListInNotes = (list) => {
-    setNotes((prevNotes) => ({ ...prevNotes, [currentDateKey]: list }));
+    setLists((prevNotes) => ({ ...prevNotes, [currentDateKey]: list }));
     // console.log("Added list " + JSON.stringify(list) + " in Lists " + JSON.stringify(Lists));
     console.log("Added list in Lists:");
     console.dir(list);
@@ -265,9 +265,43 @@ function App() {
     }
   }, [List]);
 
+  // --- УДАЛЕНИЕ ---
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const switchDeleting = () => {
+    console.log("Deleting Changed");
+    if (isDeleting) {
+      setIsDeleting(false);
+    } else {
+      setIsDeleting(true);
+    }
+  }
+
+  const handleDeleteByIndex = (index) => {
+    console.log("Мне сказали удалить этот индекс:");
+    console.dir(index);
+    const newList = [...List]; // Копируем массив
+    newList.splice(index, 1);   // Мутируем копию
+    // setList(newList);  
+    if (newList.length !== 0) {
+      console.log("Список не пустой остался");
+      setList(newList);  
+    } else {
+      console.log("Список остался пустой");
+      setList(null);  
+      console.log("Удаляю список из Lists");
+      const { [currentDateKey]: deletedList, ...newLists } = Lists;
+      setLists(newLists);  
+    }
+  };
+
   return (
     <div className="app">
       <header>
+        <div>
+          <p>Deleting: {isDeleting ? "True" : "False"}</p>
+          <button onClick={switchDeleting}>Edit</button>
+        </div>
         <h1>Мой дневник питания</h1>
         <p>{currentDateKey}</p>
         <div className="navigation">
@@ -282,10 +316,18 @@ function App() {
             </li>
           ))}
         </ul> баг отсуствие данных undef.map */}
-        <div style={{display: 'flex', gap: '10px', alignItems: 'flex-start', width: '100%', justifyContent: 'space-between'}}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "flex-start",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
           <ul
             style={{
-              width: '300px',
+              width: "300px",
               display: "flex",
               flexDirection: "column-reverse",
               alignItems: "center",
@@ -338,7 +380,7 @@ function App() {
 
           <ul
             style={{
-              width: '300px',
+              width: "300px",
               display: "flex",
               flexDirection: "column-reverse",
               alignItems: "center",
@@ -353,6 +395,7 @@ function App() {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
+                    position: "relative",
                   }}
                 >
                   <strong>{el.name}:</strong>
@@ -367,6 +410,35 @@ function App() {
                     }
                     alt=""
                   />
+                  { isDeleting && <button
+                    onClick={() => handleDeleteByIndex(index)}
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "10px",
+                      // top: "50%",
+                      transform: "translateY(-50%)",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "32px",
+                      color: "#999",
+                      // opacity: 0, // изначально скрыт
+                      transition: "opacity 0.2s",
+                      // Показываем при наведении на li
+                      display: "inline-block",
+                      padding: '0',
+                      margin: '0',
+                      width: "20px",
+                      height: "20px",
+                    }}
+                    // Показываем крестик при наведении на элемент списка
+                    // onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+                    // onMouseLeave={(e) => (e.currentTarget.style.opacity = 0)}
+                    // aria-label={`Удалить ${el.name}`}
+                  >
+                    ×
+                  </button>}
                 </li>
               ))
             ) : (
@@ -376,7 +448,7 @@ function App() {
 
           <ul
             style={{
-              width: '300px',
+              width: "300px",
               display: "flex",
               flexDirection: "column-reverse",
               alignItems: "center",
