@@ -29,7 +29,7 @@ const saveToLocalStorage = (data) => {
 function App() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isSymptomModalOpen, setIsSymptomModalOpen] = useState(false);
-  const [CartItems, setCartItems] = useState([]);
+  // const [CartItems, setCartItems] = useState([]);
 
   // кароче
   // date = 22
@@ -74,9 +74,9 @@ function App() {
 
 
 
-  const addToCart = (product, type = "undef") => {
-    setCartItems([...CartItems, { ...product, type }]);
-  };
+  // const addToCart = (product, type = "undef") => {
+  //   setCartItems([...CartItems, { ...product, type }]);
+  // };
 
   // Дату в Key
   // const KeyFromDate = (date) => {
@@ -111,7 +111,7 @@ function App() {
   };
 
   const [Lists, setLists] = useState(loadFromLocalStorage());
-  const [List, setList] = useState(null);
+  const [List, setList] = useState(Lists[currentDateKey]);
   const [currentList, setcurrentList] = useState(Lists[currentDateKey]);
 
   const [Item, setItem] = useState({});
@@ -571,7 +571,7 @@ function App() {
       {isProductModalOpen && (
         <ProductModal
           onClose={() => setIsProductModalOpen(false)}
-          onSelectProduct={addToCart}
+          // onSelectProduct={addToCart}
           onSelectProduct2={AddItemInList}
         />
       )}
@@ -579,7 +579,7 @@ function App() {
       {isSymptomModalOpen && (
         <SymptomModal
           onClose={() => setIsSymptomModalOpen(false)}
-          onSelectProduct={addToCart}
+          // onSelectProduct={addToCart}
         />
       )}
     </div>

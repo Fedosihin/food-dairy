@@ -1,7 +1,8 @@
 // src/ProductModal.jsx
 import { products } from "./productsData";
 
-function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
+// function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
+function ProductModal({ onClose, onSelectProduct2 }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -15,7 +16,7 @@ function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
               key={product.id}
               className="product-card"
               onClick={() => {
-                onSelectProduct(product, "product");
+                // onSelectProduct(product, "product");
                 onSelectProduct2({...product, type: "food"});
                 onClose();
               }}
