@@ -410,7 +410,7 @@ function App() {
                     }
                     alt=""
                   />
-                  <button
+                  { isDeleting && <button
                     onClick={() => handleDeleteByIndex(index)}
                     style={{
                       position: "absolute",
@@ -438,7 +438,7 @@ function App() {
                     // aria-label={`Удалить ${el.name}`}
                   >
                     ×
-                  </button>
+                  </button>}
                 </li>
               ))
             ) : (
