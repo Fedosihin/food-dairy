@@ -1,7 +1,7 @@
 // src/ProductModal.jsx
 import { symptoms } from './symptomsData';
 
-function SymptomModal({ onClose, onSelectProduct: onSelectSymptom }) {
+function SymptomModal({ onClose, onSelectSymptom }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -12,7 +12,7 @@ function SymptomModal({ onClose, onSelectProduct: onSelectSymptom }) {
             <div 
               key={symptom.id}
               className="product-card"
-              onClick={() => {onSelectSymptom(symptom, 'symptom'); onClose();}}
+              onClick={() => {onSelectSymptom({...symptom, type: 'symptom'}); onClose();}}
             >
               <img 
                 src={symptom.image} 
