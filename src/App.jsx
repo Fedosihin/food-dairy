@@ -100,7 +100,7 @@ function App() {
     setCurrentDateKey(newDate.toISOString().split("T")[0]);
     setList(Lists[newDate.toISOString().split("T")[0]]);
   };
-  
+
   const goPrevDate = () => {
     console.log("--- МЕНЯЮ ДАТУ ---");
     const newDate = new Date(currentDate);
@@ -160,8 +160,8 @@ function App() {
   };
 
   // А ОНО НАДО????
-  // 
-  // 
+  //
+  //
   // // Очищаем список при смене даты
   // useEffect(() => {
   //   console.log("Достаю свежий список при переключении даты");
@@ -265,9 +265,26 @@ function App() {
     }
   }, [List]);
 
+  // --- УДАЛЕНИЕ ---
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  function switchDeleting() {
+    console.log("Deleting Changed");
+    
+    if (isDeleting) {
+      setIsDeleting(false);
+    } else {
+      setIsDeleting(true);
+    }
+  }
+
   return (
     <div className="app">
       <header>
+        <div>
+          <p>Deleting: {isDeleting ? "True" : "False"}</p>
+          <button onClick={switchDeleting}>Edit</button>
+        </div>
         <h1>Мой дневник питания</h1>
         <p>{currentDateKey}</p>
         <div className="navigation">
@@ -282,10 +299,18 @@ function App() {
             </li>
           ))}
         </ul> баг отсуствие данных undef.map */}
-        <div style={{display: 'flex', gap: '10px', alignItems: 'flex-start', width: '100%', justifyContent: 'space-between'}}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "flex-start",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
           <ul
             style={{
-              width: '300px',
+              width: "300px",
               display: "flex",
               flexDirection: "column-reverse",
               alignItems: "center",
@@ -338,7 +363,7 @@ function App() {
 
           <ul
             style={{
-              width: '300px',
+              width: "300px",
               display: "flex",
               flexDirection: "column-reverse",
               alignItems: "center",
@@ -376,7 +401,7 @@ function App() {
 
           <ul
             style={{
-              width: '300px',
+              width: "300px",
               display: "flex",
               flexDirection: "column-reverse",
               alignItems: "center",
