@@ -5,29 +5,31 @@ import Cart from "./Caaaart";
 import SymptomModal from "./SymptomModal";
 
 const loadFromLocalStorage = () => {
-  // try {
-  //   const serializedData = localStorage.getItem("cart");
-  //   return serializedData ? JSON.parse(serializedData) : [];
-  // } catch (e) {
-  //   console.error("LocalStorage load error:", e);
-  //   return [];
-  // }
-  return [];
+  try {
+    console.log("Пытаюсь загрузить локал:");
+    const serializedData = localStorage.getItem("data-lists");
+    return serializedData ? JSON.parse(serializedData) : {};
+  } catch (e) {
+    console.error("LocalStorage load error:", e);
+    return {};
+  }
 };
 
 const saveToLocalStorage = (data) => {
-  // try {
-  //   const serializedData = JSON.stringify(data);
-  //   localStorage.setItem("cart", serializedData);
-  // } catch (e) {
-  //   console.error("LocalStorage save error:", e);
-  // }
+  try {
+    console.log("Пытаюсь сохранить:");
+    console.dir(data);
+    const serializedData = JSON.stringify(data);
+    localStorage.setItem("data-lists", serializedData);
+  } catch (e) {
+    console.error("LocalStorage save error:", e);
+  }
 };
 
 function App() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isSymptomModalOpen, setIsSymptomModalOpen] = useState(false);
-  const [CartItems, setCartItems] = useState(loadFromLocalStorage());
+  const [CartItems, setCartItems] = useState([]);
 
   // кароче
   // date = 22
@@ -70,9 +72,7 @@ function App() {
     },
   ];
 
-  useEffect(() => {
-    saveToLocalStorage(CartItems);
-  }, [CartItems]);
+
 
   const addToCart = (product, type = "undef") => {
     setCartItems([...CartItems, { ...product, type }]);
@@ -110,7 +110,7 @@ function App() {
     setList(Lists[newDate.toISOString().split("T")[0]]);
   };
 
-  const [Lists, setLists] = useState({});
+  const [Lists, setLists] = useState(loadFromLocalStorage());
   const [List, setList] = useState(null);
   const [currentList, setcurrentList] = useState(Lists[currentDateKey]);
 
@@ -294,6 +294,11 @@ function App() {
       setLists(newLists);  
     }
   };
+
+    useEffect(() => {
+    console.log("!!! Сохранение в локал !!!");
+    saveToLocalStorage(Lists);
+  }, [Lists]);
 
   return (
     <div className="app">
@@ -561,7 +566,7 @@ function App() {
         </button>
       </header>
 
-      <Cart items={CartItems} />
+      {/* <Cart items={CartItems} /> */}
 
       {isProductModalOpen && (
         <ProductModal
