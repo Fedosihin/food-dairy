@@ -3,27 +3,27 @@ import { useState, useEffect } from "react";
 import ProductModal from "./ProductModal";
 import SymptomModal from "./SymptomModal";
 
-// const loadFromLocalStorage = () => {
-//   try {
-//     console.log("Пытаюсь загрузить локал:");
-//     const serializedData = localStorage.getItem("data-lists");
-//     return serializedData ? JSON.parse(serializedData) : {};
-//   } catch (e) {
-//     console.error("LocalStorage load error:", e);
-//     return {};
-//   }
-// };
+const loadFromLocalStorage = () => {
+  try {
+    console.log("Пытаюсь загрузить локал:");
+    const serializedData = localStorage.getItem("data-lists");
+    return serializedData ? JSON.parse(serializedData) : {};
+  } catch (e) {
+    console.error("LocalStorage load error:", e);
+    return {};
+  }
+};
 
-// const saveToLocalStorage = (data) => {
-//   try {
-//     console.log("Пытаюсь сохранить:");
-//     console.dir(data);
-//     const serializedData = JSON.stringify(data);
-//     localStorage.setItem("data-lists", serializedData);
-//   } catch (e) {
-//     console.error("LocalStorage save error:", e);
-//   }
-// };
+const saveToLocalStorage = (data) => {
+  try {
+    console.log("Пытаюсь сохранить:");
+    console.dir(data);
+    const serializedData = JSON.stringify(data);
+    localStorage.setItem("data-lists", serializedData);
+  } catch (e) {
+    console.error("LocalStorage save error:", e);
+  }
+};
 
 function App() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -53,8 +53,9 @@ function App() {
     setList(Lists[newDate.toISOString().split("T")[0]]);
   };
 
-  // const [Lists, setLists] = useState(loadFromLocalStorage());
-  const [Lists, setLists] = useState({});
+  const [Lists, setLists] = useState(() => loadFromLocalStorage());
+
+
   const [List, setList] = useState(Lists[currentDateKey]);
 
   // Создаем Объект
@@ -136,10 +137,10 @@ function App() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("!!! Сохранение в локал !!!");
-  //   saveToLocalStorage(Lists);
-  // }, [Lists]);
+  useEffect(() => {
+    console.log("!!! Сохранение в локал !!!");
+    saveToLocalStorage(Lists);
+  }, [Lists]);
 
   return (
     <div className="app">
