@@ -88,24 +88,6 @@ function App() {
     }
   };
 
-  // Свежий List
-  useEffect(() => {
-    console.log("Обновился: LisT");
-    console.dir(List);
-  }, [List]);
-
-  // Cвежий Lists
-  useEffect(() => {
-    console.log("Обновился: ListSSS");
-    console.dir(Lists);
-  }, [Lists]);
-
-  // Cвежий currentDateKey
-  // useEffect(() => {
-  //   console.log("Обновился: DateKey");
-  //   console.dir(currentDateKey);
-  // }, [currentDateKey]);
-
   // --- УДАЛЕНИЕ ---
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -171,11 +153,28 @@ function App() {
     }
     else {
       console.log("Не двигаю");
-      
     }
   };
 
   // --- UseEffects ---
+
+  // Свежий List
+  useEffect(() => {
+    console.log("Обновился: LisT");
+    console.dir(List);
+  }, [List]);
+
+  // Cвежий Lists
+  useEffect(() => {
+    console.log("Обновился: ListSSS");
+    console.dir(Lists);
+  }, [Lists]);
+
+  // Cвежий currentDateKey
+  // useEffect(() => {
+  //   console.log("Обновился: DateKey");
+  //   console.dir(currentDateKey);
+  // }, [currentDateKey]);
 
   useEffect(() => {
     console.log("!!! Сохранение в локал !!!");
@@ -328,8 +327,8 @@ function App() {
                     <div
                       style={{
                         position: "absolute",
-                        left: "10px",
-                        top: "10px",
+                        left: "-20px",
+                        top: "30px",
                         // top: "50%",
                         transform: "translateY(-50%)",
                         backgroundColor: "transparent",
@@ -356,10 +355,10 @@ function App() {
                           // transition: "opacity 0.2s",
                           // Показываем при наведении на li
                           // display: "inline-block",
-                          padding: "0",
+                          padding: "5px",
                           margin: "0",
-                          width: "20px",
-                          height: "20px",
+                          // width: "20px",
+                          // height: "20px",
                         }}
                         onClick={() => handleEditing(index, "up")}
                         // Показываем крестик при наведении на элемент списка
@@ -367,7 +366,7 @@ function App() {
                         // onMouseLeave={(e) => (e.currentTarget.style.opacity = 0)}
                         // aria-label={`Удалить ${el.name}`}
                       >
-                        up
+                        ↑
                       </button>
                       <button
                         onClick={() => handleEditing(index, "down")}
@@ -379,13 +378,13 @@ function App() {
                           // transition: "opacity 0.2s",
                           // Показываем при наведении на li
                           // display: "inline-block",
-                          padding: "0",
+                          padding: "5px",
                           margin: "0",
-                          width: "20px",
-                          height: "20px",
+                          // width: "20px",
+                          // height: "20px",
                         }}
                       >
-                        down
+                        ↓
                       </button>
                     </div>
                   )}
