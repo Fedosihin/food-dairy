@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import ProductModal from "./ProductModal";
 import SymptomModal from "./SymptomModal";
+import { products as productsServer } from "./productsData";
+
 
 const loadFromLocalStorage = () => {
   try {
@@ -169,6 +171,25 @@ function App() {
     }
   };
 
+  // --- СПИСОК ПРОДУКТОВ ---
+
+ const producsssts = [
+    {
+      id: 1,
+      name: "Молочная Вермишель",
+      image: "milkVermicelli"
+    },{}];
+
+  const [productsList, setProductsList] = useState([]);
+
+  useEffect(() => {
+  console.log("загужаю локал продукты");
+  const data = localStorage.getItem("products-local");
+  const productsLocal = data ? JSON.parse(data) : [];
+  console.log("объед продукты локал + сервер");
+    setProductsList([...productsServer], [...productsLocal]);
+  }, []);
+
   // --- UseEffects ---
 
   // Свежий List
@@ -190,14 +211,28 @@ function App() {
   // }, [currentDateKey]);
 
   useEffect(() => {
-    console.log("!!! Сохранение в локал !!!");
+    console.log("!!! Сохранение в локал Lists !!!");
     saveToLocalStorage(Lists);
   }, [Lists]);
+
+  useEffect(() => {
+    console.log("!!! Сохранение в локал productsList !!!");
+    // saveToLocalStorage(pro);
+    const data = JSON.stringify(productsList);
+    localStorage.setItem("products-local", data);
+  }, [productsList]);
 
   return (
     <div className="app">
       <header>
-        <div style={{display: 'flex', justifyContent: 'center', gap: '30px', padding: '5px'}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "30px",
+            padding: "5px",
+          }}
+        >
           <div>
             <p>Delete: {isDeleting ? "True" : "False"}</p>
             <button onClick={switchDeleting}>Delete</button>
