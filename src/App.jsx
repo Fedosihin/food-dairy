@@ -128,6 +128,7 @@ function App() {
     if (newList.length !== 0) {
       console.log("Список не пустой остался");
       setList(newList);
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     } else {
       console.log("Список остался пустой");
       setList(null);
