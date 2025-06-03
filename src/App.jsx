@@ -505,7 +505,7 @@ function App() {
           </ul>
         </div>
 
-        <div style={{display: 'flex', position: 'fixed', top: "300px", width: "100%", minHeight: "100px", flexDirection: "column", gap: "10px", marginBottom: "60px", alignItems: 'flex-end'}}>
+        <div style={{display: 'flex', position: 'fixed', top: "300px", right: "10px", minHeight: "100px", flexDirection: "column", gap: "10px", marginBottom: "60px", alignItems: 'flex-end'}}>
           <button
             className="add-button"
             onClick={() => setIsProductModalOpen(true)}
@@ -523,10 +523,11 @@ function App() {
             style={{backgroundColor: "blue"}}
             onClick={() => setIsNewProductModalOpen(true)}
           >
-            new+
+            +
           </button>
         </div>
       </header>
+
       {isNewProductModalOpen && (
         <NewProductModal
           onClose={() => setIsNewProductModalOpen(false)}
