@@ -55,7 +55,6 @@ function App() {
 
   const [Lists, setLists] = useState(() => loadFromLocalStorage());
 
-
   const [List, setList] = useState(Lists[currentDateKey]);
 
   // Создаем Объект
@@ -88,25 +87,21 @@ function App() {
       setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     }
   };
+  // --- РЕДАКТИРОВАНИЕ ---
+  const [isEditing, setIsEditing] = useState(false);
 
-  // Свежий List
-  useEffect(() => {
-    console.log("Обновился: LisT");
-    console.dir(List);
-  }, [List]);
-
-  // Cвежий Lists
-  useEffect(() => {
-    console.log("Обновился: ListSSS");
-    console.dir(Lists);
-  }, [Lists]);
-
-  // Cвежий currentDateKey
-  // useEffect(() => {
-  //   console.log("Обновился: DateKey");
-  //   console.dir(currentDateKey);
-  // }, [currentDateKey]);
-
+  const switchEditing = () => {
+    console.log("Editing Changed");
+    if (isEditing) {
+      setIsEditing(false);
+      setIsDeleting(false);
+      setIsMoving(false);
+    } else {
+      setIsEditing(true);
+      setIsDeleting(true);
+      setIsMoving(true);
+    }
+  };
 
   // --- УДАЛЕНИЕ ---
   const [isDeleting, setIsDeleting] = useState(false);
@@ -138,6 +133,62 @@ function App() {
     }
   };
 
+  // --- Перемещение ---
+  const [isMoving, setIsMoving] = useState(false);
+  const switchMoving = () => {
+    console.log("Editing Changed");
+    if (isMoving) {
+      setIsMoving(false);
+    } else {
+      setIsMoving(true);
+    }
+  };
+
+  const handleMoving = (index, direction) => {
+    console.log("Мне сказали передвинуть этот индекс:");
+    console.dir(index);
+    if (direction == "up" && index != List.length - 1) {
+      console.log("Пытаюсь сдвинуть вверх");
+      const newList = [...List];
+      const temp = List[index];
+      newList[index] = newList[index + 1];
+      newList[index + 1] = temp;
+      setList([...newList]);
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
+    } else if (direction == "down" && index != 0) {
+      console.log("Пытаюсь сдвинуть вниз");
+      console.log("Пытаюсь сдвинуть вверх");
+      const newList = [...List];
+      const temp = List[index];
+      newList[index] = newList[index - 1];
+      newList[index - 1] = temp;
+      setList([...newList]);
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
+    } else {
+      console.log("Не двигаю");
+    }
+  };
+
+  // --- UseEffects ---
+
+  // Свежий List
+  useEffect(() => {
+    console.log("Обновился: LisT");
+    console.dir(List);
+  }, [List]);
+
+  // Cвежий Lists
+  useEffect(() => {
+    console.log("Обновился: ListSSS");
+    console.dir(Lists);
+  }, [Lists]);
+
+  // Cвежий currentDateKey
+  // useEffect(() => {
+  //   console.log("Обновился: DateKey");
+  //   console.dir(currentDateKey);
+  // }, [currentDateKey]);
+
   useEffect(() => {
     console.log("!!! Сохранение в локал !!!");
     saveToLocalStorage(Lists);
@@ -146,11 +197,21 @@ function App() {
   return (
     <div className="app">
       <header>
-        <div>
-          <p>Deleting: {isDeleting ? "True" : "False"}</p>
-          <button onClick={switchDeleting}>Edit</button>
+        <div style={{display: 'flex', justifyContent: 'center', gap: '30px', padding: '5px'}}>
+          <div>
+            <p>Delete: {isDeleting ? "True" : "False"}</p>
+            <button onClick={switchDeleting}>Delete</button>
+          </div>
+          <div>
+            <p>Move: {isMoving ? "True" : "False"}</p>
+            <button onClick={switchMoving}>Move</button>
+          </div>
+          <div>
+            <p>Editing: {isEditing ? "True" : "False"}</p>
+            <button onClick={switchEditing}>Edit</button>
+          </div>
         </div>
-        <h1>Мой дневник питания</h1>
+        {/* <h6>Мой дневник питания</h6> */}
         <p>{currentDateKey}</p>
         <div className="navigation">
           <button onClick={goPrevDate}>← Назад</button>
@@ -280,6 +341,71 @@ function App() {
                     >
                       ×
                     </button>
+                  )}
+                  {isMoving && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: "-20px",
+                        top: "30px",
+                        // top: "50%",
+                        transform: "translateY(-50%)",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: "32px",
+                        color: "#999",
+                        // opacity: 0, // изначально скрыт
+                        transition: "opacity 0.2s",
+                        // Показываем при наведении на li
+                        display: "inline-block",
+                        padding: "0",
+                        margin: "0",
+                        width: "20px",
+                        height: "20px",
+                      }}
+                    >
+                      <button
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          // color: "#999",
+                          // opacity: 0, // изначально скрыт
+                          // transition: "opacity 0.2s",
+                          // Показываем при наведении на li
+                          // display: "inline-block",
+                          padding: "5px 10px",
+                          margin: "0",
+                          // width: "20px",
+                          // height: "20px",
+                        }}
+                        onClick={() => handleMoving(index, "up")}
+                        // Показываем крестик при наведении на элемент списка
+                        // onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+                        // onMouseLeave={(e) => (e.currentTarget.style.opacity = 0)}
+                        // aria-label={`Удалить ${el.name}`}
+                      >
+                        ↑
+                      </button>
+                      <button
+                        onClick={() => handleMoving(index, "down")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          // color: "#999",
+                          // opacity: 0, // изначально скрыт
+                          // transition: "opacity 0.2s",
+                          // Показываем при наведении на li
+                          // display: "inline-block",
+                          padding: "5px 10px",
+                          margin: "0",
+                          // width: "20px",
+                          // height: "20px",
+                        }}
+                      >
+                        ↓
+                      </button>
+                    </div>
                   )}
                 </li>
               ))
