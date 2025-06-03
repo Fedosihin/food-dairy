@@ -7,6 +7,9 @@ import avocado from './assets/images/food/avocado.webp';
 import boiledPotato from './assets/images/food/boiledPotato.jpg';
 import boiledMeat from './assets/images/food/boiledMeat.jpg';
 import butter from './assets/images/food/butter.jpg';
+import cordonBleu from './assets/images/food/cordonBleu.jpg';
+import oliveOil from './assets/images/food/oliveOil.jpg';
+import oatmeal from './assets/images/food/oatmeal.jpg';
 
 export const products = [
     {
@@ -33,6 +36,21 @@ export const products = [
       id: 5,
       name: "Сливочное масло",
       image: butter
+    },
+    {
+      id: 6,
+      name: "Кордон блю",
+      image: cordonBleu
+    },
+    {
+      id: 7,
+      name: "Оливковое масло",
+      image: oliveOil
+    },
+    {
+      id: 8,
+      name: "Овсяная каша",
+      image: oatmeal
     },
     // Добавьте другие продукты по аналогии
   ];
