@@ -183,18 +183,32 @@ function App() {
   //     },{}];
 
   const [productsList, setProductsList] = useState([]);
-
-  useEffect(() => {
-    console.log("загужаю локал продукты");
+  const [productsServerList, setProductsServerList] = useState(productsServer);
+  const [productsLocalList, setProductsLocalList] = useState(()=>{   console.log("загужаю локал продукты в локальный список");
     const data = localStorage.getItem("products-local");
     const productsLocal = data ? JSON.parse(data) : [];
-    console.log("объед продукты локал + сервер");
-    setProductsList([...productsServer], [...productsLocal]);
-  }, []);
+    return productsLocal ? productsLocal : [];});
 
-  const AddProductInList = (name) => {
+  useEffect(()=>{
+    console.log("LOCAL PRODUCTS:");
+    console.dir(productsLocalList);
+  }, [productsLocalList])
+
+  useEffect(()=>{
+    console.log("SERVER PRODUCTS:");
+    console.dir(productsServerList);
+  }, [productsServerList])
+
+  // useEffect(() => {
+  //   console.log("загужаю локал продукты в локальный список");
+  //   const data = localStorage.getItem("products-local");
+  //   const productsLocal = data ? JSON.parse(data) : [];
+  //   setProductsLocalList(productsLocal);
+  // }, []);
+
+  const AddProductInLocalList = (name) => {
     const newProduct = {id: 999, name: name, image: "undef"};
-    setProductsList([...productsList, newProduct]);
+    setProductsLocalList([...productsLocalList, newProduct]);
   };
 
   // --- UseEffects ---
@@ -204,7 +218,12 @@ function App() {
     console.log("Обновился: LisT");
     console.dir(List);
   }, [List]);
-
+  // Обновился productsLocalList
+  useEffect(() => {
+    console.log("Обновился: productsLocalList");
+    console.dir(productsLocalList);
+  }, [productsLocalList]);
+  
   // Cвежий Lists
   useEffect(() => {
     console.log("Обновился: ListSSS");
@@ -225,9 +244,9 @@ function App() {
   useEffect(() => {
     console.log("!!! Сохранение в локал productsList !!!");
     // saveToLocalStorage(pro);
-    const data = JSON.stringify(productsList);
+    const data = JSON.stringify(productsLocalList);
     localStorage.setItem("products-local", data);
-  }, [productsList]);
+  }, [productsLocalList]);
 
   return (
     <div className="app">
@@ -537,8 +556,8 @@ function App() {
         <NewProductModal
           onClose={() => setIsNewProductModalOpen(false)}
           onSelectProduct2={AddItemInList}
-          onAddProductInList = {AddProductInList}
-          products = {productsList}
+          onAddProductInLocalList = {AddProductInLocalList}
+          products = {[...productsLocalList, ...productsServerList]}
         />
       )}
 

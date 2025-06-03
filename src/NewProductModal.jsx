@@ -3,7 +3,7 @@ import { useState } from "react";
 // function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
 function NewProductModal({
   products = [],
-  onAddProductInList,
+  onAddProductInLocalList,
   onClose,
   onSelectProduct2,
 }) {
@@ -27,7 +27,7 @@ function NewProductModal({
             onChange={(e) => setName(e.target.value)}
             // onKeyDown={handleKeyPress}
           ></input>
-          <button onClick={() => onAddProductInList(name)}>add</button>
+          <button onClick={() => onAddProductInLocalList(name)}>add</button>
         </div>
         <button className="close-button" onClick={onClose}>
           ×
