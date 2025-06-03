@@ -152,11 +152,22 @@ function App() {
     console.dir(index);
     if (direction == "up" && index != List.length - 1) {
       console.log("Пытаюсь сдвинуть вверх");
-      
+      const newList = [...List];
+      const temp = List[index];
+      newList[index] = newList[index + 1]
+      newList[index + 1] = temp;
+      setList([...newList]);
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     }
     else if (direction == "down" && index != 0) {
       console.log("Пытаюсь сдвинуть вниз");
-
+      console.log("Пытаюсь сдвинуть вверх");
+      const newList = [...List];
+      const temp = List[index];
+      newList[index] = newList[index - 1]
+      newList[index - 1] = temp;
+      setList([...newList]);
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     }
     else {
       console.log("Не двигаю");
