@@ -1,8 +1,34 @@
+import { useState } from "react";
+
 // function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
-function NewProductModal({ products = [], onClose, onSelectProduct2 }) {
+function NewProductModal({
+  products = [],
+  onAddProductInList,
+  onClose,
+  onSelectProduct2,
+}) {
+  const [name, setName] = useState("");
+  // useEffect(()=>{setName(name)},[name]);
+
+  // const handleKeyPress = (e) => {
+    // if (e.key === "Enter") handleAddProduct(); // Добавляем по Enter
+  // };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div>
+          <p>добавить продукт</p>
+          <p>name: {name}</p>
+          <input
+            type="text"
+            placeholder="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            // onKeyDown={handleKeyPress}
+          ></input>
+          <button onClick={() => onAddProductInList(name)}>add</button>
+        </div>
         <button className="close-button" onClick={onClose}>
           ×
         </button>
@@ -14,7 +40,7 @@ function NewProductModal({ products = [], onClose, onSelectProduct2 }) {
               className="product-card"
               onClick={() => {
                 // onSelectProduct(product, "product");
-                onSelectProduct2({...product, type: "food"});
+                onSelectProduct2({ ...product, type: "food" });
                 onClose();
               }}
             >

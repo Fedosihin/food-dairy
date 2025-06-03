@@ -192,6 +192,11 @@ function App() {
     setProductsList([...productsServer], [...productsLocal]);
   }, []);
 
+  const AddProductInList = (name) => {
+    const newProduct = {id: 999, name: name, image: "undef"};
+    setProductsList([...productsList, newProduct]);
+  };
+
   // --- UseEffects ---
 
   // Свежий List
@@ -532,6 +537,7 @@ function App() {
         <NewProductModal
           onClose={() => setIsNewProductModalOpen(false)}
           onSelectProduct2={AddItemInList}
+          onAddProductInList = {AddProductInList}
           products = {productsList}
         />
       )}

@@ -110,6 +110,7 @@
 
 /* Модальное окно */
 .modal-overlay {
+  color: black;
   position: fixed;
   top: 0;
   left: 0;
