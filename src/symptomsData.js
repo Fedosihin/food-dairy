@@ -8,6 +8,7 @@ import thirst from './assets/images/symptoms/thirst.png';
 import belching from './assets/images/symptoms/belching.jpg';
 import crack from './assets/images/symptoms/crack.avif';
 import acid from './assets/images/symptoms/acid.png';
+import raid from './assets/images/symptoms/raid.jpg';
 
 export const symptoms = [
     {
@@ -39,6 +40,11 @@ export const symptoms = [
       id: 6,
       name: "Кисло во рту",
       image: acid
+    },
+    {
+      id: 7,
+      name: "Налёт на языке",
+      image: raid
     },
     // Добавьте другие продукты по аналогии
   ];
