@@ -87,6 +87,21 @@ function App() {
       setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     }
   };
+  // --- РЕДАКТИРОВАНИЕ ---
+  const [isEditing, setIsEditing] = useState(false);
+  
+  const switchEditing = () => {
+    console.log("Editing Changed");
+    if (isEditing) {
+      setIsEditing(false);
+      setIsDeleting(false);
+      setIsMoving(false);
+    } else {
+      setIsEditing(true);
+      setIsDeleting(true);
+      setIsMoving(true);
+    }
+  };
 
   // --- УДАЛЕНИЕ ---
   const [isDeleting, setIsDeleting] = useState(false);
@@ -119,17 +134,17 @@ function App() {
   };
 
   // --- Перемещение ---
-  const [isEditing, setIsEditing] = useState(false);
-  const switchEditing = () => {
+  const [isMoving, setIsMoving] = useState(false);
+  const switchMoving = () => {
     console.log("Editing Changed");
-    if (isEditing) {
-      setIsEditing(false);
+    if (isMoving) {
+      setIsMoving(false);
     } else {
-      setIsEditing(true);
+      setIsMoving(true);
     }
   };
 
-  const handleEditing = (index, direction) => {
+  const handleMoving = (index, direction) => {
     console.log("Мне сказали передвинуть этот индекс:");
     console.dir(index);
     if (direction == "up" && index != List.length - 1) {
@@ -185,8 +200,12 @@ function App() {
     <div className="app">
       <header>
         <div>
-          <p>Deleting: {isDeleting ? "True" : "False"}</p>
-          <button onClick={switchDeleting}>Edit</button>
+          <p>Delete: {isDeleting ? "True" : "False"}</p>
+          <button onClick={switchDeleting}>Delete</button>
+        </div>
+        <div>
+          <p>Move: {isMoving ? "True" : "False"}</p>
+          <button onClick={switchMoving}>Move</button>
         </div>
         <div>
           <p>Editing: {isEditing ? "True" : "False"}</p>
@@ -323,7 +342,7 @@ function App() {
                       ×
                     </button>
                   )}
-                  {isEditing && (
+                  {isMoving && (
                     <div
                       style={{
                         position: "absolute",
@@ -360,7 +379,7 @@ function App() {
                           // width: "20px",
                           // height: "20px",
                         }}
-                        onClick={() => handleEditing(index, "up")}
+                        onClick={() => handleMoving(index, "up")}
                         // Показываем крестик при наведении на элемент списка
                         // onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
                         // onMouseLeave={(e) => (e.currentTarget.style.opacity = 0)}
@@ -369,7 +388,7 @@ function App() {
                         ↑
                       </button>
                       <button
-                        onClick={() => handleEditing(index, "down")}
+                        onClick={() => handleMoving(index, "down")}
                         style={{
                           cursor: "pointer",
                           fontSize: "20px",
