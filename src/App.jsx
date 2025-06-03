@@ -66,15 +66,6 @@ function App() {
 
   // Добавляем Объект в Список
   // и добавляем список в списки
-  const addListInLists = () => {
-    console.log("Пытаюсь добавить List в Listsss через функцию");
-    if (List) {
-      console.log("Есть что добавлять. Добавляю");
-      AddListInNotes(List);
-    } else {
-      console.log("Нет List чтобы добавлять в Lists");
-    }
-  };
 
   const AddItemInList = (obj) => {
     console.log("Пытаюсь добавить объект в список");
@@ -85,7 +76,7 @@ function App() {
       setList((prevList) => [...prevList, item]);
       console.log("Добавляю newList в Lists");
       const newList = [...List, item];
-      setLists((prevNotes) => ({ ...prevNotes, [currentDateKey]: newList }));
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     } else {
       console.log("Не нашёл список");
       console.log("Создаю список");
@@ -93,16 +84,8 @@ function App() {
       setList([item]);
       console.log("Добавляю newList в Lists");
       const newList = [item];
-      setLists((prevNotes) => ({ ...prevNotes, [currentDateKey]: newList }));
+      setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
     }
-  };
-  
-
-  const AddListInNotes = (list) => {
-    setLists((prevNotes) => ({ ...prevNotes, [currentDateKey]: list }));
-    // console.log("Added list " + JSON.stringify(list) + " in Lists " + JSON.stringify(Lists));
-    console.log("Added list in Lists:");
-    console.dir(list);
   };
 
   // Свежий List
@@ -123,17 +106,6 @@ function App() {
   //   console.dir(currentDateKey);
   // }, [currentDateKey]);
 
-  // Добавляем Список в Списки
-  // useEffect(() => {
-  //   // if (List) {
-  //   console.log("Пытаюсь обновить Listsss");
-  //   if (List) {
-  //     console.log("Есть что добавлять. Добавляю");
-  //     AddListInNotes(List);
-  //   } else {
-  //     console.log("Нечего добавлять");
-  //   }
-  // }, [List]);
 
   // --- УДАЛЕНИЕ ---
   const [isDeleting, setIsDeleting] = useState(false);
