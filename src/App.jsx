@@ -520,6 +520,7 @@ function App() {
           </button>
           <button
             className="add-button"
+            style={{backgroundColor: "blue"}}
             onClick={() => setIsNewProductModalOpen(true)}
           >
             new+
@@ -530,6 +531,7 @@ function App() {
         <NewProductModal
           onClose={() => setIsNewProductModalOpen(false)}
           onSelectProduct2={AddItemInList}
+          products = {productsList}
         />
       )}
 
