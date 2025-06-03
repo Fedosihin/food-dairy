@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ProductModal from "./ProductModal";
 import SymptomModal from "./SymptomModal";
 import { products as productsServer } from "./productsData";
-
+import NewProductModal from "./NewProductModal";
 
 const loadFromLocalStorage = () => {
   try {
@@ -173,20 +173,22 @@ function App() {
 
   // --- СПИСОК ПРОДУКТОВ ---
 
- const producsssts = [
-    {
-      id: 1,
-      name: "Молочная Вермишель",
-      image: "milkVermicelli"
-    },{}];
+  const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
+
+  //  const producsssts = [
+  //     {
+  //       id: 1,
+  //       name: "Молочная Вермишель",
+  //       image: "milkVermicelli"
+  //     },{}];
 
   const [productsList, setProductsList] = useState([]);
 
   useEffect(() => {
-  console.log("загужаю локал продукты");
-  const data = localStorage.getItem("products-local");
-  const productsLocal = data ? JSON.parse(data) : [];
-  console.log("объед продукты локал + сервер");
+    console.log("загужаю локал продукты");
+    const data = localStorage.getItem("products-local");
+    const productsLocal = data ? JSON.parse(data) : [];
+    console.log("объед продукты локал + сервер");
     setProductsList([...productsServer], [...productsLocal]);
   }, []);
 
@@ -503,19 +505,33 @@ function App() {
           </ul>
         </div>
 
-        <button
-          className="add-button"
-          onClick={() => setIsProductModalOpen(true)}
-        >
-          +
-        </button>
-        <button
-          className="add-button-red"
-          onClick={() => setIsSymptomModalOpen(true)}
-        >
-          +
-        </button>
+        <div style={{display: 'flex', position: 'fixed', top: "300px", width: "100%", minHeight: "100px", flexDirection: "column", gap: "10px", marginBottom: "60px", alignItems: 'flex-end'}}>
+          <button
+            className="add-button"
+            onClick={() => setIsProductModalOpen(true)}
+          >
+            +
+          </button>
+          <button
+            className="add-button-red"
+            onClick={() => setIsSymptomModalOpen(true)}
+          >
+            +
+          </button>
+          <button
+            className="add-button"
+            onClick={() => setIsNewProductModalOpen(true)}
+          >
+            new+
+          </button>
+        </div>
       </header>
+      {isNewProductModalOpen && (
+        <NewProductModal
+          onClose={() => setIsNewProductModalOpen(false)}
+          onSelectProduct2={AddItemInList}
+        />
+      )}
 
       {isProductModalOpen && (
         <ProductModal
