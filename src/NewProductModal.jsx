@@ -2,7 +2,8 @@ import { useState } from "react";
 
 // function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
 function NewProductModal({
-  products = [],
+  productsLocal = [],
+  productsServer = [],
   onAddProductInLocalList,
   onClose,
   onSelectProduct2,
@@ -33,8 +34,30 @@ function NewProductModal({
           ×
         </button>
         <h2>Выберите продукт</h2>
+        <h3>Ваши продукты</h3>
+         <div className="products-grid">
+          {productsLocal.map((product) => (
+            <div
+              key={product.id}
+              className="product-card"
+              onClick={() => {
+                // onSelectProduct(product, "product");
+                onSelectProduct2({ ...product, type: "food" });
+                onClose();
+              }}
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="product-thumb"
+              />
+              <p>{product.name}</p>
+            </div>
+          ))}
+        </div>
+        <h3>Прочие продукты</h3>
         <div className="products-grid">
-          {products.map((product) => (
+          {productsServer.map((product) => (
             <div
               key={product.id}
               className="product-card"

@@ -182,8 +182,7 @@ function App() {
   //       image: "milkVermicelli"
   //     },{}];
 
-  const [productsList, setProductsList] = useState([]);
-  const [productsServerList, setProductsServerList] = useState(productsServer);
+  const [productsServerList, _] = useState(productsServer);
   const [productsLocalList, setProductsLocalList] = useState(()=>{   console.log("загужаю локал продукты в локальный список");
     const data = localStorage.getItem("products-local");
     const productsLocal = data ? JSON.parse(data) : [];
@@ -557,7 +556,8 @@ function App() {
           onClose={() => setIsNewProductModalOpen(false)}
           onSelectProduct2={AddItemInList}
           onAddProductInLocalList = {AddProductInLocalList}
-          products = {[...productsLocalList, ...productsServerList]}
+          productsServer = {productsServerList}
+          productsLocal = {productsLocalList}
         />
       )}
 
