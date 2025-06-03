@@ -133,7 +133,7 @@ function App() {
       console.log("Список остался пустой");
       setList(null);
       console.log("Удаляю список из Lists");
-      const { [currentDateKey]: deletedList, ...newLists } = Lists;
+      const { [currentDateKey]: _, ...newLists } = Lists;
       setLists(newLists);
     }
   };
