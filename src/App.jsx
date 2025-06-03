@@ -210,6 +210,26 @@ function App() {
     setProductsLocalList([...productsLocalList, newProduct]);
   };
 
+  const DeleteLocalProduct = (index) => {
+    console.log("Мне сказали удалить этот продукт. его индекс:");
+    console.dir(index);
+    const newProductsLocalList = [...productsLocalList]; // Копируем массив
+    newProductsLocalList.splice(index, 1); // Мутируем копию
+    if (newProductsLocalList.length !== 0) {
+      console.log("Локал не пустой остался");
+      setProductsLocalList(newProductsLocalList);
+      // setList(newProductsLocalList);
+      // setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
+    } else {
+      console.log("Локал остался пустой");
+      setProductsLocalList([]);
+      // setList(null);
+      // console.log("Удаляю список из Lists");
+      // const { [currentDateKey]: _, ...newProductsLocalList } = Lists;
+      // setLists(newProductsLocalList);
+    }
+  };
+
   // --- UseEffects ---
 
   // Свежий List
@@ -556,6 +576,7 @@ function App() {
           onClose={() => setIsNewProductModalOpen(false)}
           onSelectProduct2={AddItemInList}
           onAddProductInLocalList = {AddProductInLocalList}
+          onDeleteLocal = {DeleteLocalProduct}
           productsServer = {productsServerList}
           productsLocal = {productsLocalList}
         />
