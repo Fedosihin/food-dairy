@@ -89,7 +89,7 @@ function App() {
   };
   // --- РЕДАКТИРОВАНИЕ ---
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const switchEditing = () => {
     console.log("Editing Changed");
     if (isEditing) {
@@ -151,22 +151,20 @@ function App() {
       console.log("Пытаюсь сдвинуть вверх");
       const newList = [...List];
       const temp = List[index];
-      newList[index] = newList[index + 1]
+      newList[index] = newList[index + 1];
       newList[index + 1] = temp;
       setList([...newList]);
       setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
-    }
-    else if (direction == "down" && index != 0) {
+    } else if (direction == "down" && index != 0) {
       console.log("Пытаюсь сдвинуть вниз");
       console.log("Пытаюсь сдвинуть вверх");
       const newList = [...List];
       const temp = List[index];
-      newList[index] = newList[index - 1]
+      newList[index] = newList[index - 1];
       newList[index - 1] = temp;
       setList([...newList]);
       setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
-    }
-    else {
+    } else {
       console.log("Не двигаю");
     }
   };
@@ -199,19 +197,21 @@ function App() {
   return (
     <div className="app">
       <header>
-        <div>
-          <p>Delete: {isDeleting ? "True" : "False"}</p>
-          <button onClick={switchDeleting}>Delete</button>
+        <div style={{display: 'flex', justifyContent: 'center', gap: '30px', padding: '5px'}}>
+          <div>
+            <p>Delete: {isDeleting ? "True" : "False"}</p>
+            <button onClick={switchDeleting}>Delete</button>
+          </div>
+          <div>
+            <p>Move: {isMoving ? "True" : "False"}</p>
+            <button onClick={switchMoving}>Move</button>
+          </div>
+          <div>
+            <p>Editing: {isEditing ? "True" : "False"}</p>
+            <button onClick={switchEditing}>Edit</button>
+          </div>
         </div>
-        <div>
-          <p>Move: {isMoving ? "True" : "False"}</p>
-          <button onClick={switchMoving}>Move</button>
-        </div>
-        <div>
-          <p>Editing: {isEditing ? "True" : "False"}</p>
-          <button onClick={switchEditing}>Edit</button>
-        </div>
-        <h1>Мой дневник питания</h1>
+        {/* <h6>Мой дневник питания</h6> */}
         <p>{currentDateKey}</p>
         <div className="navigation">
           <button onClick={goPrevDate}>← Назад</button>
