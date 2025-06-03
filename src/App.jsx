@@ -55,7 +55,6 @@ function App() {
 
   const [Lists, setLists] = useState(() => loadFromLocalStorage());
 
-
   const [List, setList] = useState(Lists[currentDateKey]);
 
   // Создаем Объект
@@ -107,7 +106,6 @@ function App() {
   //   console.dir(currentDateKey);
   // }, [currentDateKey]);
 
-
   // --- УДАЛЕНИЕ ---
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -138,6 +136,36 @@ function App() {
     }
   };
 
+  // --- Перемещение ---
+  const [isEditing, setIsEditing] = useState(false);
+  const switchEditing = () => {
+    console.log("Editing Changed");
+    if (isEditing) {
+      setIsEditing(false);
+    } else {
+      setIsEditing(true);
+    }
+  };
+
+  const handleEditing = (index, direction) => {
+    console.log("Мне сказали передвинуть этот индекс:");
+    console.dir(index);
+    if (direction == "up" && index != List.length - 1) {
+      console.log("Пытаюсь сдвинуть вверх");
+      
+    }
+    else if (direction == "down" && index != 0) {
+      console.log("Пытаюсь сдвинуть вниз");
+
+    }
+    else {
+      console.log("Не двигаю");
+      
+    }
+  };
+
+  // --- UseEffects ---
+
   useEffect(() => {
     console.log("!!! Сохранение в локал !!!");
     saveToLocalStorage(Lists);
@@ -149,6 +177,10 @@ function App() {
         <div>
           <p>Deleting: {isDeleting ? "True" : "False"}</p>
           <button onClick={switchDeleting}>Edit</button>
+        </div>
+        <div>
+          <p>Editing: {isEditing ? "True" : "False"}</p>
+          <button onClick={switchEditing}>Edit</button>
         </div>
         <h1>Мой дневник питания</h1>
         <p>{currentDateKey}</p>
@@ -280,6 +312,71 @@ function App() {
                     >
                       ×
                     </button>
+                  )}
+                  {isEditing && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: "10px",
+                        top: "10px",
+                        // top: "50%",
+                        transform: "translateY(-50%)",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: "32px",
+                        color: "#999",
+                        // opacity: 0, // изначально скрыт
+                        transition: "opacity 0.2s",
+                        // Показываем при наведении на li
+                        display: "inline-block",
+                        padding: "0",
+                        margin: "0",
+                        width: "20px",
+                        height: "20px",
+                      }}
+                    >
+                      <button
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          // color: "#999",
+                          // opacity: 0, // изначально скрыт
+                          // transition: "opacity 0.2s",
+                          // Показываем при наведении на li
+                          // display: "inline-block",
+                          padding: "0",
+                          margin: "0",
+                          width: "20px",
+                          height: "20px",
+                        }}
+                        onClick={() => handleEditing(index, "up")}
+                        // Показываем крестик при наведении на элемент списка
+                        // onMouseEnter={(e) => (e.currentTarget.style.opacity = 1)}
+                        // onMouseLeave={(e) => (e.currentTarget.style.opacity = 0)}
+                        // aria-label={`Удалить ${el.name}`}
+                      >
+                        up
+                      </button>
+                      <button
+                        onClick={() => handleEditing(index, "down")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          // color: "#999",
+                          // opacity: 0, // изначально скрыт
+                          // transition: "opacity 0.2s",
+                          // Показываем при наведении на li
+                          // display: "inline-block",
+                          padding: "0",
+                          margin: "0",
+                          width: "20px",
+                          height: "20px",
+                        }}
+                      >
+                        down
+                      </button>
+                    </div>
                   )}
                 </li>
               ))
