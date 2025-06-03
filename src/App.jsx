@@ -205,8 +205,9 @@ function App() {
   //   setProductsLocalList(productsLocal);
   // }, []);
 
-  const AddProductInLocalList = (name) => {
-    const newProduct = {id: 999, name: name, image: "undef"};
+  const AddProductInLocalList = (name, image, index) => {
+    // const newProduct = {id: 999, name: name, image: "undef"};
+    const newProduct = {id: index, name: name, image: image};
     setProductsLocalList([...productsLocalList, newProduct]);
   };
 

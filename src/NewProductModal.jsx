@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DEFAULT_IMAGE from "./assets/images/food/defaultFoodImage.jpg";
 
 // function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
 function NewProductModal({
@@ -10,17 +11,75 @@ function NewProductModal({
   onSelectProduct2,
 }) {
   const [name, setName] = useState("");
-  // useEffect(()=>{setName(name)},[name]);
 
-  // const handleKeyPress = (e) => {
-  // if (e.key === "Enter") handleAddProduct(); // Добавляем по Enter
-  // };
+  const [image, setImage] = useState(DEFAULT_IMAGE);
+  const [error, setError] = useState("");
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 1. Проверка типа файла
+    if (!file.type.match("image.*")) {
+      setError("Пожалуйста, загрузите файл изображения (JPEG, PNG, GIF)");
+      return;
+    }
+
+    // 2. Проверка размера файла (например, не больше 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      setError("Файл слишком большой (максимум 5MB)");
+      return;
+    }
+
+    // 3. Чтение файла
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      // 4. Сохранение в localStorage
+      const result = event.target.result;
+      setImage(result);
+      // try {
+      //   localStorage.setItem("uploadedImage", event.target.result);
+      //   setImage(event.target.result);
+      //   setError("");
+      // } catch (err) {
+      //   setError(
+      //     "Не удалось сохранить изображение. LocalStorage может быть переполнен."
+      //   );
+      // }
+    };
+
+    reader.onerror = () => {
+      setError("Ошибка чтения файла");
+    };
+
+    reader.readAsDataURL(file); // Читаем как Data URL
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div>
           <p>добавить продукт</p>
+          <div>
+            <h2>Загрузка изображения</h2>
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
+            {image && (
+              <div>
+                <h3>Предпросмотр:</h3>
+                <img
+                  src={image}
+                  alt="Uploaded preview"
+                  style={{ maxWidth: "300px", maxHeight: "300px" }}
+                />
+                <p>Изображение сохранено в localStorage!</p>
+              </div>
+            )}
+          </div>
           <input
             type="text"
             placeholder="name"
@@ -28,7 +87,7 @@ function NewProductModal({
             onChange={(e) => setName(e.target.value)}
             // onKeyDown={handleKeyPress}
           ></input>
-          <button onClick={() => onAddProductInLocalList(name)}>add</button>
+          <button onClick={() => onAddProductInLocalList(name, image, productsLocal.length)}>add</button>
         </div>
         <button className="close-button" onClick={onClose}>
           ×
@@ -80,9 +139,9 @@ function NewProductModal({
                 alt={product.name}
                 className="product-thumb"
                 onClick={() => {
-                onSelectProduct2({ ...product, type: "food" });
-                onClose();
-              }}
+                  onSelectProduct2({ ...product, type: "food" });
+                  onClose();
+                }}
               />
               <p>{product.name}</p>
             </div>
