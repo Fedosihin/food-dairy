@@ -374,7 +374,7 @@ function App() {
                           // transition: "opacity 0.2s",
                           // Показываем при наведении на li
                           // display: "inline-block",
-                          padding: "5px",
+                          padding: "5px 10px",
                           margin: "0",
                           // width: "20px",
                           // height: "20px",
@@ -397,7 +397,7 @@ function App() {
                           // transition: "opacity 0.2s",
                           // Показываем при наведении на li
                           // display: "inline-block",
-                          padding: "5px",
+                          padding: "5px 10px",
                           margin: "0",
                           // width: "20px",
                           // height: "20px",
