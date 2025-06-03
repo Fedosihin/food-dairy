@@ -15,6 +15,14 @@ function NewProductModal({
   const [image, setImage] = useState(DEFAULT_IMAGE);
   const [error, setError] = useState("");
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      setName("");
+      setImage(DEFAULT_IMAGE);
+      onAddProductInLocalList(name, image, productsLocal.length);
+    } // Добавляем по Enter
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -85,9 +93,18 @@ function NewProductModal({
             placeholder="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            // onKeyDown={handleKeyPress}
+            onKeyDown={handleKeyPress}
           ></input>
-          <button disabled={!name} onClick={() => {setName(""); setImage(DEFAULT_IMAGE); onAddProductInLocalList(name, image, productsLocal.length)}}>add</button>
+          <button
+            disabled={!name}
+            onClick={() => {
+              setName("");
+              setImage(DEFAULT_IMAGE);
+              onAddProductInLocalList(name, image, productsLocal.length);
+            }}
+          >
+            add
+          </button>
         </div>
         <button className="close-button" onClick={onClose}>
           ×
