@@ -68,13 +68,13 @@ function NewProductModal({
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            {image && (
+            {image != DEFAULT_IMAGE && (
               <div>
                 <h3>Предпросмотр:</h3>
                 <img
                   src={image}
                   alt="Uploaded preview"
-                  style={{ maxWidth: "300px", maxHeight: "300px" }}
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
                 />
                 <p>Изображение сохранено в localStorage!</p>
               </div>
@@ -87,7 +87,7 @@ function NewProductModal({
             onChange={(e) => setName(e.target.value)}
             // onKeyDown={handleKeyPress}
           ></input>
-          <button onClick={() => onAddProductInLocalList(name, image, productsLocal.length)}>add</button>
+          <button disabled={!name} onClick={() => {setName(""); setImage(DEFAULT_IMAGE); onAddProductInLocalList(name, image, productsLocal.length)}}>add</button>
         </div>
         <button className="close-button" onClick={onClose}>
           ×
