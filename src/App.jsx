@@ -53,7 +53,12 @@ function App() {
     setList(Lists[newDate.toISOString().split("T")[0]]);
   };
 
-  const [Lists, setLists] = useState(loadFromLocalStorage());
+  // const [Lists, setLists] = useState(loadFromLocalStorage());
+  const [Lists, setLists] = useState({});
+  useEffect(()=>{
+    setLists(loadFromLocalStorage());
+  }, []);
+  
   const [List, setList] = useState(Lists[currentDateKey]);
 
   // Создаем Объект
