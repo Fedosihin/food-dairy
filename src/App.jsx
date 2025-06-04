@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import ProductModal from "./ProductModal";
 import SymptomModal from "./SymptomModal";
 import { products as productsServer } from "./productsData";
+import { symptoms as symptomsServer } from "./symptomsData";
 import NewProductModal from "./NewProductModal";
+import NewSymptomModal from "./NewSymptomModal";
 
 const loadFromLocalStorage = () => {
   try {
@@ -183,20 +185,22 @@ function App() {
   //     },{}];
 
   const [productsServerList, _] = useState(productsServer);
-  const [productsLocalList, setProductsLocalList] = useState(()=>{   console.log("загужаю локал продукты в локальный список");
+  const [productsLocalList, setProductsLocalList] = useState(() => {
+    console.log("загужаю локал продукты в локальный список");
     const data = localStorage.getItem("products-local");
     const productsLocal = data ? JSON.parse(data) : [];
-    return productsLocal ? productsLocal : [];});
+    return productsLocal ? productsLocal : [];
+  });
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("LOCAL PRODUCTS:");
     console.dir(productsLocalList);
-  }, [productsLocalList])
+  }, [productsLocalList]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("SERVER PRODUCTS:");
     console.dir(productsServerList);
-  }, [productsServerList])
+  }, [productsServerList]);
 
   // useEffect(() => {
   //   console.log("загужаю локал продукты в локальный список");
@@ -207,7 +211,7 @@ function App() {
 
   const AddProductInLocalList = (name, image, index) => {
     // const newProduct = {id: 999, name: name, image: "undef"};
-    const newProduct = {id: index, name: name, image: image};
+    const newProduct = { id: index, name: name, image: image };
     setProductsLocalList([...productsLocalList, newProduct]);
   };
 
@@ -231,6 +235,56 @@ function App() {
     }
   };
 
+  // --- NEW SYMPTOMS MODAL ---
+
+  const [isNewSymptomModalOpen, setIsNewSymptomModalOpen] = useState(false);
+  const [symptomsServerList, setSymptomsServerList] = useState(symptomsServer);
+  const [symptomsLocalList, setSymptomsLocalList] = useState(() => {
+    console.log("загужаю локал симптомы в локальный список");
+    const data = localStorage.getItem("symptoms-local");
+    const symptomsLocal = data ? JSON.parse(data) : [];
+    return symptomsLocal ? symptomsLocal : [];
+  });
+
+
+  useEffect(() => {
+    console.log("LOCAL Symptoms:");
+    console.dir(symptomsLocalList);
+  }, [symptomsLocalList]);
+
+  useEffect(() => {
+    console.log("SERVER Symptoms:");
+    console.dir(symptomsServerList);
+  }, [symptomsServerList]);
+
+
+  const AddSymptomInLocalList = (name, image, index) => {
+    // const newProduct = {id: 999, name: name, image: "undef"};
+    const newSymptom = { id: index, name: name, image: image };
+    setSymptomsLocalList([...symptomsLocalList, newSymptom]);
+  };
+
+  const DeleteLocalSymptom = (index) => {
+    console.log("Мне сказали удалить этот продукт. его индекс:");
+    console.dir(index);
+    const newSymptomsLocalList = [...symptomsLocalList]; // Копируем массив
+    newSymptomsLocalList.splice(index, 1); // Мутируем копию
+    if (newSymptomsLocalList.length !== 0) {
+      console.log("Локал не пустой остался");
+      setSymptomsLocalList(newSymptomsLocalList);
+      // setList(newProductsLocalList);
+      // setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
+    } else {
+      console.log("Локал остался пустой");
+      setSymptomsLocalList([]);
+      // setList(null);
+      // console.log("Удаляю список из Lists");
+      // const { [currentDateKey]: _, ...newProductsLocalList } = Lists;
+      // setLists(newProductsLocalList);
+    }
+  };
+
+
   // --- UseEffects ---
 
   // Свежий List
@@ -243,7 +297,7 @@ function App() {
     console.log("Обновился: productsLocalList");
     console.dir(productsLocalList);
   }, [productsLocalList]);
-  
+
   // Cвежий Lists
   useEffect(() => {
     console.log("Обновился: ListSSS");
@@ -267,6 +321,13 @@ function App() {
     const data = JSON.stringify(productsLocalList);
     localStorage.setItem("products-local", data);
   }, [productsLocalList]);
+
+    useEffect(() => {
+    console.log("!!! Сохранение в локал symptomsList !!!");
+    // saveToLocalStorage(pro);
+    const data = JSON.stringify(symptomsLocalList);
+    localStorage.setItem("symptoms-local", data);
+  }, [symptomsLocalList]);
 
   return (
     <div className="app">
@@ -549,7 +610,19 @@ function App() {
           </ul>
         </div>
 
-        <div style={{display: 'flex', position: 'fixed', top: "300px", right: "10px", minHeight: "100px", flexDirection: "column", gap: "10px", marginBottom: "60px", alignItems: 'flex-end'}}>
+        <div
+          style={{
+            display: "flex",
+            position: "fixed",
+            top: "300px",
+            right: "10px",
+            minHeight: "100px",
+            flexDirection: "column",
+            gap: "10px",
+            marginBottom: "60px",
+            alignItems: "flex-end",
+          }}
+        >
           <button
             className="add-button"
             onClick={() => setIsProductModalOpen(true)}
@@ -564,7 +637,14 @@ function App() {
           </button>
           <button
             className="add-button"
-            style={{backgroundColor: "blue"}}
+            style={{ backgroundColor: "green" }}
+            onClick={() => setIsNewSymptomModalOpen(true)}
+          >
+            +
+          </button>
+          <button
+            className="add-button"
+            style={{ backgroundColor: "blue" }}
             onClick={() => setIsNewProductModalOpen(true)}
           >
             +
@@ -576,10 +656,21 @@ function App() {
         <NewProductModal
           onClose={() => setIsNewProductModalOpen(false)}
           onSelectProduct2={AddItemInList}
-          onAddProductInLocalList = {AddProductInLocalList}
-          onDeleteLocal = {DeleteLocalProduct}
-          productsServer = {productsServerList}
-          productsLocal = {productsLocalList}
+          onAddProductInLocalList={AddProductInLocalList}
+          onDeleteLocal={DeleteLocalProduct}
+          productsServer={productsServerList}
+          productsLocal={productsLocalList}
+        />
+      )}
+
+      {isNewSymptomModalOpen && (
+        <NewSymptomModal
+          onClose={() => setIsNewSymptomModalOpen(false)}
+          onSelectProduct2={AddItemInList}
+          onAddProductInLocalList={AddSymptomInLocalList}
+          onDeleteLocal={DeleteLocalSymptom}
+          productsServer={symptomsServerList}
+          productsLocal={symptomsLocalList}
         />
       )}
 
