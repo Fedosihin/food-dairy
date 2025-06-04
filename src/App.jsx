@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import ProductModal from "./ProductModal";
 import SymptomModal from "./SymptomModal";
+import { products as productsServer } from "./productsData";
+import NewProductModal from "./NewProductModal";
 
 const loadFromLocalStorage = () => {
   try {
@@ -169,6 +171,66 @@ function App() {
     }
   };
 
+  // --- СПИСОК ПРОДУКТОВ ---
+
+  const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
+
+  //  const producsssts = [
+  //     {
+  //       id: 1,
+  //       name: "Молочная Вермишель",
+  //       image: "milkVermicelli"
+  //     },{}];
+
+  const [productsServerList, _] = useState(productsServer);
+  const [productsLocalList, setProductsLocalList] = useState(()=>{   console.log("загужаю локал продукты в локальный список");
+    const data = localStorage.getItem("products-local");
+    const productsLocal = data ? JSON.parse(data) : [];
+    return productsLocal ? productsLocal : [];});
+
+  useEffect(()=>{
+    console.log("LOCAL PRODUCTS:");
+    console.dir(productsLocalList);
+  }, [productsLocalList])
+
+  useEffect(()=>{
+    console.log("SERVER PRODUCTS:");
+    console.dir(productsServerList);
+  }, [productsServerList])
+
+  // useEffect(() => {
+  //   console.log("загужаю локал продукты в локальный список");
+  //   const data = localStorage.getItem("products-local");
+  //   const productsLocal = data ? JSON.parse(data) : [];
+  //   setProductsLocalList(productsLocal);
+  // }, []);
+
+  const AddProductInLocalList = (name, image, index) => {
+    // const newProduct = {id: 999, name: name, image: "undef"};
+    const newProduct = {id: index, name: name, image: image};
+    setProductsLocalList([...productsLocalList, newProduct]);
+  };
+
+  const DeleteLocalProduct = (index) => {
+    console.log("Мне сказали удалить этот продукт. его индекс:");
+    console.dir(index);
+    const newProductsLocalList = [...productsLocalList]; // Копируем массив
+    newProductsLocalList.splice(index, 1); // Мутируем копию
+    if (newProductsLocalList.length !== 0) {
+      console.log("Локал не пустой остался");
+      setProductsLocalList(newProductsLocalList);
+      // setList(newProductsLocalList);
+      // setLists((prevLists) => ({ ...prevLists, [currentDateKey]: newList }));
+    } else {
+      console.log("Локал остался пустой");
+      setProductsLocalList([]);
+      // setList(null);
+      // console.log("Удаляю список из Lists");
+      // const { [currentDateKey]: _, ...newProductsLocalList } = Lists;
+      // setLists(newProductsLocalList);
+    }
+  };
+
   // --- UseEffects ---
 
   // Свежий List
@@ -176,7 +238,12 @@ function App() {
     console.log("Обновился: LisT");
     console.dir(List);
   }, [List]);
-
+  // Обновился productsLocalList
+  useEffect(() => {
+    console.log("Обновился: productsLocalList");
+    console.dir(productsLocalList);
+  }, [productsLocalList]);
+  
   // Cвежий Lists
   useEffect(() => {
     console.log("Обновился: ListSSS");
@@ -190,14 +257,28 @@ function App() {
   // }, [currentDateKey]);
 
   useEffect(() => {
-    console.log("!!! Сохранение в локал !!!");
+    console.log("!!! Сохранение в локал Lists !!!");
     saveToLocalStorage(Lists);
   }, [Lists]);
+
+  useEffect(() => {
+    console.log("!!! Сохранение в локал productsList !!!");
+    // saveToLocalStorage(pro);
+    const data = JSON.stringify(productsLocalList);
+    localStorage.setItem("products-local", data);
+  }, [productsLocalList]);
 
   return (
     <div className="app">
       <header>
-        <div style={{display: 'flex', justifyContent: 'center', gap: '30px', padding: '5px'}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "30px",
+            padding: "5px",
+          }}
+        >
           <div>
             <p>Delete: {isDeleting ? "True" : "False"}</p>
             <button onClick={switchDeleting}>Delete</button>
@@ -468,19 +549,39 @@ function App() {
           </ul>
         </div>
 
-        <button
-          className="add-button"
-          onClick={() => setIsProductModalOpen(true)}
-        >
-          +
-        </button>
-        <button
-          className="add-button-red"
-          onClick={() => setIsSymptomModalOpen(true)}
-        >
-          +
-        </button>
+        <div style={{display: 'flex', position: 'fixed', top: "300px", right: "10px", minHeight: "100px", flexDirection: "column", gap: "10px", marginBottom: "60px", alignItems: 'flex-end'}}>
+          <button
+            className="add-button"
+            onClick={() => setIsProductModalOpen(true)}
+          >
+            +
+          </button>
+          <button
+            className="add-button-red"
+            onClick={() => setIsSymptomModalOpen(true)}
+          >
+            +
+          </button>
+          <button
+            className="add-button"
+            style={{backgroundColor: "blue"}}
+            onClick={() => setIsNewProductModalOpen(true)}
+          >
+            +
+          </button>
+        </div>
       </header>
+
+      {isNewProductModalOpen && (
+        <NewProductModal
+          onClose={() => setIsNewProductModalOpen(false)}
+          onSelectProduct2={AddItemInList}
+          onAddProductInLocalList = {AddProductInLocalList}
+          onDeleteLocal = {DeleteLocalProduct}
+          productsServer = {productsServerList}
+          productsLocal = {productsLocalList}
+        />
+      )}
 
       {isProductModalOpen && (
         <ProductModal
