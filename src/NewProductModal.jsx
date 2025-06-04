@@ -68,44 +68,7 @@ function NewProductModal({
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div>
-          <p>добавить продукт</p>
-          <div>
-            <h2>Загрузка изображения</h2>
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-
-            {error && <p style={{ color: "red" }}>{error}</p>}
-
-            {image != DEFAULT_IMAGE && (
-              <div>
-                <h3>Предпросмотр:</h3>
-                <img
-                  src={image}
-                  alt="Uploaded preview"
-                  style={{ maxWidth: "100px", maxHeight: "100px" }}
-                />
-                <p>Изображение сохранено в localStorage!</p>
-              </div>
-            )}
-          </div>
-          <input
-            type="text"
-            placeholder="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyDown={handleKeyPress}
-          ></input>
-          <button
-            disabled={!name}
-            onClick={() => {
-              setName("");
-              setImage(DEFAULT_IMAGE);
-              onAddProductInLocalList(name, image, productsLocal.length);
-            }}
-          >
-            add
-          </button>
-        </div>
+ 
         <button className="close-button" onClick={onClose}>
           ×
         </button>
@@ -184,6 +147,44 @@ function NewProductModal({
               <p>{product.name}</p>
             </div>
           ))}
+        </div>
+               <div>
+          <p>добавить продукт</p>
+          <div>
+            <h2>Загрузка изображения</h2>
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
+            {image != DEFAULT_IMAGE && (
+              <div>
+                <h3>Предпросмотр:</h3>
+                <img
+                  src={image}
+                  alt="Uploaded preview"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+                <p>Изображение сохранено в localStorage!</p>
+              </div>
+            )}
+          </div>
+          <input
+            type="text"
+            placeholder="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={handleKeyPress}
+          ></input>
+          <button
+            disabled={!name}
+            onClick={() => {
+              setName("");
+              setImage(DEFAULT_IMAGE);
+              onAddProductInLocalList(name, image, productsLocal.length);
+            }}
+          >
+            add
+          </button>
         </div>
       </div>
     </div>

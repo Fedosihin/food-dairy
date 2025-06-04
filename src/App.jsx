@@ -28,7 +28,6 @@ const saveToLocalStorage = (data) => {
 };
 
 function App() {
-
   // Глобальная выбранная дата
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentDateKey, setCurrentDateKey] = useState(
@@ -242,7 +241,6 @@ function App() {
     return symptomsLocal ? symptomsLocal : [];
   });
 
-
   useEffect(() => {
     console.log("LOCAL Symptoms:");
     console.dir(symptomsLocalList);
@@ -252,7 +250,6 @@ function App() {
     console.log("SERVER Symptoms:");
     console.dir(symptomsServerList);
   }, [symptomsServerList]);
-
 
   const AddSymptomInLocalList = (name, image, index) => {
     // const newProduct = {id: 999, name: name, image: "undef"};
@@ -279,7 +276,6 @@ function App() {
       // setLists(newProductsLocalList);
     }
   };
-
 
   // --- UseEffects ---
 
@@ -318,7 +314,7 @@ function App() {
     localStorage.setItem("products-local", data);
   }, [productsLocalList]);
 
-    useEffect(() => {
+  useEffect(() => {
     console.log("!!! Сохранение в локал symptomsList !!!");
     // saveToLocalStorage(pro);
     const data = JSON.stringify(symptomsLocalList);
@@ -365,6 +361,7 @@ function App() {
           }}
         >
           <ul
+            className="hide-on-mobile"
             style={{
               width: "300px",
               display: "flex",
@@ -553,6 +550,7 @@ function App() {
           </ul>
 
           <ul
+            className="hide-on-mobile"
             style={{
               width: "300px",
               display: "flex",
