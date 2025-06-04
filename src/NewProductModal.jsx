@@ -3,6 +3,7 @@ import DEFAULT_IMAGE from "./assets/images/food/defaultFoodImage.jpg";
 
 // function ProductModal({ onClose, onSelectProduct, onSelectProduct2 }) {
 function NewProductModal({
+  listLength,
   productsLocal = [],
   productsServer = [],
   onAddProductInLocalList,
