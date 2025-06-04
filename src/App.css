@@ -100,6 +100,12 @@
   object-fit: cover;
 }
 
+.hide-on-mobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
 .undef-image {
   width: 100px;
   height: 100px;
