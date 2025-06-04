@@ -1,11 +1,9 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
-import ProductModal from "./ProductModal";
-import SymptomModal from "./SymptomModal";
 import { products as productsServer } from "./productsData";
 import { symptoms as symptomsServer } from "./symptomsData";
-import NewProductModal from "./NewProductModal";
 import NewSymptomModal from "./NewSymptomModal";
+import NewProductModal from "./NewProductModal";
 
 const loadFromLocalStorage = () => {
   try {
@@ -30,8 +28,6 @@ const saveToLocalStorage = (data) => {
 };
 
 function App() {
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [isSymptomModalOpen, setIsSymptomModalOpen] = useState(false);
 
   // Глобальная выбранная дата
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -184,7 +180,7 @@ function App() {
   //       image: "milkVermicelli"
   //     },{}];
 
-  const [productsServerList, _] = useState(productsServer);
+  const [productsServerList, _productsServerList] = useState(productsServer);
   const [productsLocalList, setProductsLocalList] = useState(() => {
     console.log("загужаю локал продукты в локальный список");
     const data = localStorage.getItem("products-local");
@@ -238,7 +234,7 @@ function App() {
   // --- NEW SYMPTOMS MODAL ---
 
   const [isNewSymptomModalOpen, setIsNewSymptomModalOpen] = useState(false);
-  const [symptomsServerList, setSymptomsServerList] = useState(symptomsServer);
+  const [symptomsServerList, _setSymptomsServerList] = useState(symptomsServer);
   const [symptomsLocalList, setSymptomsLocalList] = useState(() => {
     console.log("загужаю локал симптомы в локальный список");
     const data = localStorage.getItem("symptoms-local");
@@ -625,18 +621,6 @@ function App() {
         >
           <button
             className="add-button"
-            onClick={() => setIsProductModalOpen(true)}
-          >
-            +
-          </button>
-          <button
-            className="add-button-red"
-            onClick={() => setIsSymptomModalOpen(true)}
-          >
-            +
-          </button>
-          <button
-            className="add-button"
             style={{ backgroundColor: "green" }}
             onClick={() => setIsNewSymptomModalOpen(true)}
           >
@@ -671,20 +655,6 @@ function App() {
           onDeleteLocal={DeleteLocalSymptom}
           productsServer={symptomsServerList}
           productsLocal={symptomsLocalList}
-        />
-      )}
-
-      {isProductModalOpen && (
-        <ProductModal
-          onClose={() => setIsProductModalOpen(false)}
-          onSelectProduct2={AddItemInList}
-        />
-      )}
-
-      {isSymptomModalOpen && (
-        <SymptomModal
-          onClose={() => setIsSymptomModalOpen(false)}
-          onSelectSymptom={AddItemInList}
         />
       )}
     </div>
